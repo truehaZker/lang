@@ -1,3 +1,7 @@
+import random as rn
+
+lang = ['RUS', 'ENG', 'TAT']
+
 tat = {
     "ones": {
         "empty": "",
@@ -216,4 +220,53 @@ def tat_gen(number):
         return "мең"
 
 
-print(tat_gen(input()))
+def rand_num():
+    return rn.randint(0, 1000)
+
+
+def game():
+    global state
+    global input_lang
+    global exit_game
+    state = 0
+    exit_game = False
+
+    while not exit_game:
+        if state == 0:
+            print("Welcome to the game!\nPlease choose language (rus, eng, tat)")
+
+            chosen = False
+
+            while not chosen:
+                input_lang = input().upper()
+
+                if input_lang in lang:
+                    print("Ok. Your language is", input_lang.upper())
+                    chosen = True
+                    state = 1
+                else:
+                    print("We don't have such language. Try again!")
+
+        elif state == 1:
+            gen_number = rand_num()
+            print("Write number", gen_number, "in", input_lang)
+            user_input = input()
+            if user_input == eval(f"{input_lang.lower()}_gen({gen_number})"):
+                print("Congratulations! That's the right answer!")
+                print("try again? (y/n)")
+                if input() == 'y':
+                    state = 0
+                else:
+                    exit_game = True
+            else:
+                print("Sorry. That's not right, right answer is", eval(f"{input_lang.lower()}_gen({gen_number})"))
+                print("try again? (y/n)")
+                if input() == 'y':
+                    state = 0
+                else:
+                    exit_game = True
+
+    print("Thanks for the game!")
+
+
+game()
